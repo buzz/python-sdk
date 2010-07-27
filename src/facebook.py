@@ -79,9 +79,13 @@ class GraphAPI(object):
     If you are using the JavaScript SDK, you can use the
     get_user_from_cookie() method below to get the OAuth access token
     for the active user from the cookie saved by the SDK.
+
+    A locale parameter can be passed that overrides the default
+    locale.
     """
-    def __init__(self, access_token=None):
+    def __init__(self, access_token=None, locale=None):
         self.access_token = access_token
+        self.locale = locale
 
     def get_object(self, id, **args):
         """Fetchs the given object from the graph."""
@@ -167,6 +171,8 @@ class GraphAPI(object):
                 post_args["access_token"] = self.access_token
             else:
                 args["access_token"] = self.access_token
+        if self.locale is not None:
+            args["locale"] = self.locale
         post_data = None if post_args is None else urllib.urlencode(post_args)
         file = urllib.urlopen("https://graph.facebook.com/" + path + "?" +
                               urllib.urlencode(args), post_data)
